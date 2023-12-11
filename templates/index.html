@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <title>Draw Mask on Image</title>
     <script>
+        let isDrawing = false;
+        const resultImage = document.getElementById('result-image');
+    
+        function startDrawing(event) {
+            isDrawing = true;
+            resultImage.style.pointerEvents = 'none'; // Disable pointer events during drawing
+            getMousePosition(event);
+            event.preventDefault(); // Prevent default dragging behavior
+        }
+    
+        function stopDrawing() {
+            isDrawing = false;
+            resultImage.style.pointerEvents = 'auto'; // Re-enable pointer events after drawing
+        }
+    
+        function getMousePosition(event) {
+            if (!isDrawing) return;
+            var rect = event.target.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            sendPoint(x, y);
+        }
+    
         function sendPoint(x, y) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/draw_mask", true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify({point: {x: x, y: y}}));
-
+    
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
@@ -18,16 +41,15 @@
                 }
             };
         }
-
-        function getMousePosition(event) {
-            var rect = event.target.getBoundingClientRect();
-            var x = event.clientX - rect.left;
-            var y = event.clientY - rect.top;
-            sendPoint(x, y);
-        }
     </script>
 </head>
 <body>
-    <img id="result-image" src="{{ url_for('static', filename='23.png') }}" alt="Result" onclick="getMousePosition(event)">
+    <img id="result-image" src="{{ url_for('static', filename='23.png') }}" 
+         alt="Result" 
+         onmousedown="startDrawing(event)"
+         onmouseup="stopDrawing()"
+         onmouseleave="stopDrawing()"
+         onmousemove="getMousePosition(event)"
+         draggable="false"> <!-- Disable default drag behavior -->
 </body>
 </html>
