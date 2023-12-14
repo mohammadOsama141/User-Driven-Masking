@@ -1,4 +1,4 @@
-# Interactive Brush Masking
+# Interactive Brush Masking (For inpaint masking)
 
 ## About the Project
 Interactive Brush Masking is a web-based application that allows users to interactively create masks on images using a brush-like tool. This project is built using Flask, a Python web framework, and incorporates HTML, JavaScript, and OpenCV for image processing. Users can click and drag their mouse over the image to draw a mask, which is updated in real-time.
