@@ -18,10 +18,15 @@ def index():
 def draw_mask():
     data = request.json
     point = data['point']
+    action = data['action']  # 'add' or 'remove'
     brush_size = 10  # Adjust brush size as needed
 
     # Update mask
-    cv2.circle(mask, (int(point['x']), int(point['y'])), brush_size, 1, -1)
+    if action == 'add':
+        cv2.circle(mask, (int(point['x']), int(point['y'])), brush_size, 1, -1)
+    elif action == 'remove':
+        cv2.circle(mask, (int(point['x']), int(point['y'])), brush_size, 0, -1)
+
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (brush_size, brush_size))
     mask_dilated = cv2.dilate(mask, kernel)
 

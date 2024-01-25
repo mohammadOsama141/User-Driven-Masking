@@ -5,6 +5,8 @@
     <title>Draw Mask on Image</title>
     <script>
         let isDrawing = false;
+        let action = 'add'; // Default action
+
         const resultImage = document.getElementById('result-image');
     
         function startDrawing(event) {
@@ -24,14 +26,18 @@
             var rect = event.target.getBoundingClientRect();
             var x = event.clientX - rect.left;
             var y = event.clientY - rect.top;
-            sendPoint(x, y);
+            sendPoint(x, y, action);
+        }
+
+        function setAction(newAction) {
+            action = newAction; // 'add' or 'remove'
         }
     
-        function sendPoint(x, y) {
+        function sendPoint(x, y, action) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/draw_mask", true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({point: {x: x, y: y}}));
+            xhr.send(JSON.stringify({point: {x: x, y: y}, action: action}));
     
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -44,6 +50,8 @@
     </script>
 </head>
 <body>
+    <button onclick="setAction('add')">Add Mask</button>
+    <button onclick="setAction('remove')">Remove Mask</button>
     <img id="result-image" src="{{ url_for('static', filename='23.png') }}" 
          alt="Result" 
          onmousedown="startDrawing(event)"
