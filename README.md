@@ -10,3 +10,11 @@ User-Driven Masking: The masking process is entirely controlled by the user, off
 Image and Mask Output: The application outputs both the original image with the mask applied and a separate mask image.
 How It Works
 The application uses Flask to serve a webpage where an image is displayed. JavaScript is used to capture mouse events when a user clicks and drags on the image. These points are sent to the Flask server, which uses OpenCV to create and update a mask based on the user's input. The mask is then applied to the original image, and both the masked image and the mask itself are saved and updated on the webpage.
+
+
+### To do:
+-- add image upload button
+-- make an adjustable brush size
+-- make a visible reticle for the brush
+-- proper front-end implementation 
+
