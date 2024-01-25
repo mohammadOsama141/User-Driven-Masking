@@ -6,7 +6,7 @@ from PIL import Image
 app = Flask(__name__)
 
 # Load and prepare the image
-raw_image = Image.open('static/23.png').convert("RGB")
+raw_image = Image.open('static/img.png').convert("RGB")
 image_height, image_width = raw_image.size
 mask = np.zeros((image_width, image_height), dtype=np.uint8)  # Initialize mask
 

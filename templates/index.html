@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Draw Mask on Image</title>
@@ -48,11 +49,14 @@
             };
         }
     </script>
+
 </head>
+
+
 <body>
     <button onclick="setAction('add')">Add Mask</button>
     <button onclick="setAction('remove')">Remove Mask</button>
-    <img id="result-image" src="{{ url_for('static', filename='23.png') }}" 
+    <img id="result-image" src="{{ url_for('static', filename='img.png') }}" 
          alt="Result" 
          onmousedown="startDrawing(event)"
          onmouseup="stopDrawing()"
@@ -60,4 +64,6 @@
          onmousemove="getMousePosition(event)"
          draggable="false"> <!-- Disable default drag behavior -->
 </body>
+
+
 </html>
