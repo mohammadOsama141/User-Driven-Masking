@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style1.css') }}">
     <title>Draw Mask on Image</title>
+
     <script>
         let isDrawing = false;
         let action = 'add'; // Default action
@@ -25,8 +27,19 @@
         function getMousePosition(event) {
             if (!isDrawing) return;
             var rect = event.target.getBoundingClientRect();
-            var x = event.clientX - rect.left;
-            var y = event.clientY - rect.top;
+            
+            // adjusting for border and padding
+            var borderWidth = 90; // Adjust if the border width changes
+            var adjustedX = event.clientX - rect.left - borderWidth;
+            var adjustedY = event.clientY - rect.top - borderWidth;
+
+            // adjust for any scaling due to max-width or other CSS properties
+            var scaleX = event.target.naturalWidth / (rect.width - 2 * borderWidth);
+            var scaleY = event.target.naturalHeight / (rect.height - 2 * borderWidth);
+
+            var x = adjustedX * scaleX;
+            var y = adjustedY * scaleY;
+
             sendPoint(x, y, action);
         }
 
@@ -53,16 +66,33 @@
 </head>
 
 
+
 <body>
-    <button onclick="setAction('add')">Add Mask</button>
-    <button onclick="setAction('remove')">Remove Mask</button>
-    <img id="result-image" src="{{ url_for('static', filename='img.png') }}" 
-         alt="Result" 
-         onmousedown="startDrawing(event)"
-         onmouseup="stopDrawing()"
-         onmouseleave="stopDrawing()"
-         onmousemove="getMousePosition(event)"
-         draggable="false"> <!-- Disable default drag behavior -->
+
+    <div class="header">
+        <h1>Draw Mask on Image</h1>
+    </div>
+    
+    <div class="container">
+        <!-- image Element -->
+        <img id="result-image" src="Images/img.png" 
+            alt="Result" 
+            onmousedown="startDrawing(event)"
+            onmouseup="stopDrawing()"
+            onmouseleave="stopDrawing()"
+            onmousemove="getMousePosition(event)"
+            draggable="false"> <!-- Disable default drag behavior -->
+
+
+        <!-- Buttons for Mask Operations -->
+        <div class="tool-section">
+            <button onclick="setAction('add')">Add Mask</button>
+            <button onclick="setAction('remove')">Remove Mask</button>
+        </div>
+    </div>
+
+
+
 </body>
 
 

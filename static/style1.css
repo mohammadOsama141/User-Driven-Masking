@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    /*background-color: #2a2828; /* bg color */
+    background: linear-gradient(to bottom right, #1a1a1a, #2e2c2c);
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+button { /* Styling for buttons */
+    background-color: #4CAF50;
+    color: rgb(255, 252, 252); /* text color */
+    padding: 10px 20px; /* padding inside the button (vertical, horizontal) */
+    margin: 10px 0; /* margin around the button */
+    border: none;
+    cursor: pointer; /* change cursor to pointer on hover*/
+    border-radius: 5px;
+    font-size: 28px;
+}
+button:hover { /* Button hover effect */
+    background-color: #1b5e1e;
+}
+
+
+img {
+    max-width: 100%;
+    /*max-height: 600px;*/
+    height: auto;
+    border: 90px solid #f5e214;
+    border-top: 60px solid #f3e010; /* smaller top border */
+    border-bottom: 60px solid #f3e010; /* smaller bottom border */
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0 0 15px 9px #fbe704; /* radiance glow effect */
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+    margin-top: 40px; /* Increased top margin for spacing */
+}
+
+.header {
+    /*background: #333;*/
+    background: linear-gradient(to bottom right, #333, #2e2c2c);
+    color: #fff;
+    padding: 10px 0;
+    border-radius: 8px;
+    margin: auto; /* Center the header */
+}
+
+.header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.tool-section {
+    margin-top: 20px;
+}

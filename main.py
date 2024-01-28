@@ -2,11 +2,19 @@ from flask import Flask, request, jsonify, render_template
 import numpy as np
 import cv2
 from PIL import Image
+from flask import send_from_directory
+
 
 app = Flask(__name__)
 
+# custom static folder "Images"
+@app.route('/Images/<path:filename>')
+def custom_static(filename):
+    return send_from_directory('Images', filename)
+
+
 # Load and prepare the image
-raw_image = Image.open('static/img.png').convert("RGB")
+raw_image = Image.open('Images/img.png').convert("RGB")
 image_height, image_width = raw_image.size
 mask = np.zeros((image_width, image_height), dtype=np.uint8)  # Initialize mask
 
@@ -37,11 +45,11 @@ def draw_mask():
     final_img = cv2.cvtColor(final_img, cv2.COLOR_BGR2RGB)
 
     # Save the combined image
-    result_path = 'static/result.png'
+    result_path = 'Images/result.png'
     cv2.imwrite(result_path, final_img)
 
     # Save the mask image
-    mask_path = 'static/mask.png'
+    mask_path = 'Images/mask.png'
     cv2.imwrite(mask_path, mask_dilated * 255)  # Save mask as a black & white image
 
     return jsonify({'image_path': result_path, 'mask_path': mask_path})
