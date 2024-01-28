@@ -16,5 +16,5 @@ The application uses Flask to serve a webpage where an image is displayed. JavaS
 - add image upload button
 - make an adjustable brush size
 - make a visible reticle for the brush
-- proper front-end implementation 
+- ~~proper front-end implementation~~
 
