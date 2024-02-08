@@ -1,16 +1,25 @@
-from flask import Flask, request, jsonify, render_template
+from fastapi import FastAPI, Request, HTTPException, Form
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+
+from PIL import Image
 import numpy as np
 import cv2
-from PIL import Image
-from flask import send_from_directory
+from pydantic import BaseModel
 
+app = FastAPI()
 
-app = Flask(__name__)
+# Mount the 'Images' directory to serve static files
+app.mount("/Images", StaticFiles(directory="Images"), name="Images")
 
-# custom static folder "Images"
-@app.route('/Images/<path:filename>')
-def custom_static(filename):
-    return send_from_directory('Images', filename)
+# Mount other directories as per Fast API requirement
+@app.get("/", response_class=HTMLResponse) # FastAPI route handler for index.html
+async def main():
+    return FileResponse('templates/index.html')
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 
 # Load and prepare the image
@@ -18,16 +27,20 @@ raw_image = Image.open('Images/img.png').convert("RGB")
 image_height, image_width = raw_image.size
 mask = np.zeros((image_width, image_height), dtype=np.uint8)  # Initialize mask
 
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
+class DrawRequest(BaseModel):
+    point: dict
+    action: str
 
-@app.route('/draw_mask', methods=['POST'])
-def draw_mask():
-    data = request.json
+@app.get("/")
+async def main():
+    return FileResponse('index.html')
+
+@app.post("/draw_mask")
+async def draw_mask(request: DrawRequest):
+    data = request.dict()
     point = data['point']
     action = data['action']  # 'add' or 'remove'
-    brush_size = 10  # Adjust brush size as needed
+    brush_size = 10  # Brush size
 
     # Update mask
     if action == 'add':
@@ -52,8 +65,10 @@ def draw_mask():
     mask_path = 'Images/mask.png'
     cv2.imwrite(mask_path, mask_dilated * 255)  # Save mask as a black & white image
 
-    return jsonify({'image_path': result_path, 'mask_path': mask_path})
+    return JSONResponse(content={'image_path': result_path, 'mask_path': mask_path})
 
+# to run this write in the terminal: uvicorn main:app --reload
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
