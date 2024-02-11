@@ -46,23 +46,27 @@
         }
 
         function setAction(newAction) {
-            action = newAction; // 'add' or 'remove'
+            action = newAction; // 'add' or 'remove' button functionality
         }
+        
     
         function sendPoint(x, y, action) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/draw_mask", true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify({point: {x: x, y: y}, action: action}));
-    
+
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
-                    var imagePath = response.image_path;
-                    document.getElementById('result-image').src = imagePath + '?' + new Date().getTime();
+                    // Update the main image source
+                    document.getElementById('result-image').src = response.image_path + '?' + new Date().getTime();
+                    // Update the mask image source in real time
+                    document.getElementById('mask-image').src = response.mask_path + '?' + new Date().getTime();
                 }
             };
         }
+        
     </script>
 
 </head>
@@ -75,24 +79,26 @@
         <h1>Draw Mask on Image</h1>
     </div>
     
-    <div class="container">
-        <!-- image Element -->
-        <img id="result-image" src="Images/img.png" 
-            alt="Result" 
-            onmousedown="startDrawing(event)"
-            onmouseup="stopDrawing()"
-            onmouseleave="stopDrawing()"
-            onmousemove="getMousePosition(event)"
-            draggable="false"> <!-- Disable default drag behavior -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Existing OG image with result image Element -->
+            <img id="result-image" src="Images/img.png" alt="Result" onmousedown="startDrawing(event)" onmouseup="stopDrawing()" onmouseleave="stopDrawing()" onmousemove="getMousePosition(event)" draggable="false">
+            
+            <!-- Existing Buttons for Mask Operations -->
+            <div class="tool-section">
+                <button onclick="setAction('add')">Add Mask</button>
+                <button onclick="setAction('remove')">Remove Mask</button>
+            </div>
+        </div>
 
-
-        <!-- Buttons for Mask Operations -->
-        <div class="tool-section">
-            <button onclick="setAction('add')">Add Mask</button>
-            <button onclick="setAction('remove')">Remove Mask</button>
+        <div class="container">
+            <!-- New Mask Image Element -->
+            <img id="mask-image" src="Images/mask.png" alt="Mask" style="max-width: 100%; height: auto;">
         </div>
     </div>
 
+    
+    
 
 
 </body>

@@ -34,12 +34,23 @@ img {
     box-shadow: 0 0 15px 9px #fbe704; /* radiance glow effect */
 }
 
-.container {
-    max-width: 800px;
-    margin: auto;
-    overflow: hidden;
-    margin-top: 40px; /* Increased top margin for spacing */
+.content-wrapper {/*encapsulation for .container */
+    display: flex;
+    justify-content: space-around; /* Align items to from the mid */
+    padding: 20px; /* space in mid */
+    /*width: 100%;  Ensure it takes full width to allow flex alignment */
 }
+.container { /* OG image (drawing) container*/
+    max-width: 800px;
+    margin-top: 40px;
+    text-align: center;
+    /* Remove 'margin: auto' if present to prevent centering
+    margin-top: 40px; /* Keep top margin 
+    margin-left: 20px; /* Add left margin to ensure spacing from the page border 
+    /* 'max-width: 800px;' is okay to keep */
+}
+
+
 
 .header {
     /*background: #333;*/

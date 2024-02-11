@@ -8,7 +8,16 @@ import numpy as np
 import cv2
 from pydantic import BaseModel
 
+
+
+
 app = FastAPI()
+
+@app.get("/static/style1.css") #refresh cache to allow auto reload of css props
+async def get_css():
+    response = FileResponse("static/style1.css")
+    response.headers["Cache-Control"] = "no-cache"
+    return response
 
 # Mount the 'Images' directory to serve static files
 app.mount("/Images", StaticFiles(directory="Images"), name="Images")
@@ -19,8 +28,6 @@ async def main():
     return FileResponse('templates/index.html')
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
 
 # Load and prepare the image
 raw_image = Image.open('Images/img.png').convert("RGB")
@@ -34,6 +41,9 @@ class DrawRequest(BaseModel):
 @app.get("/")
 async def main():
     return FileResponse('index.html')
+
+
+
 
 @app.post("/draw_mask")
 async def draw_mask(request: DrawRequest):
@@ -67,8 +77,10 @@ async def draw_mask(request: DrawRequest):
 
     return JSONResponse(content={'image_path': result_path, 'mask_path': mask_path})
 
-# to run this write in the terminal: uvicorn main:app --reload
+    
 
+
+# to run this write in the terminal: uvicorn main:app --reload
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
