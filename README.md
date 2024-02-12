@@ -18,4 +18,5 @@ The application uses Flask to serve a webpage where an image is displayed. JavaS
 - make a visible reticle for the brush
 - ~~proper front-end implementation~~
 - ~~display the mask image side by side~~
+- Add a delete mask button
 
